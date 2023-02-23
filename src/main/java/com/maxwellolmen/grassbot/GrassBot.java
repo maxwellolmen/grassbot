@@ -1,18 +1,27 @@
 package com.maxwellolmen.grassbot;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import com.maxwellolmen.grassbot.handler.MessageHandler;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
+@SpringBootApplication
 public class GrassBot {
+
+    public static JDA jda;
+
     public static void main(String[] args) {
+        SpringApplication.run(GrassBot.class, new String[] {"--server.port=8082"});
+
         if (args.length < 1) {
             System.err.println("You must pass the Discord token as an argument.");
             return;
         }
 
-        JDA jda = JDABuilder.createDefault(args[0]).build();
+        jda = JDABuilder.createDefault(args[0]).build();
 
         jda.addEventListener(new MessageHandler());
     }
