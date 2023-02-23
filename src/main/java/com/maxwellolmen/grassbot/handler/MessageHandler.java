@@ -9,7 +9,7 @@ public class MessageHandler extends ListenerAdapter {
         if (event.getAuthor().getId().equals("1078162609641107486")) return;
 
         if (event.getChannel().getId().equals("1078169935706062928")) {
-            event.getChannel().sendMessage("I detected a message in the bot channel!").queue();
+            //event.getChannel().sendMessage("I detected a message in the bot channel!").queue();
         }
     }
 }
