@@ -15,10 +15,10 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 @Controller
 public class HarisController {
 
-    @MessageMapping("/touchgrass")
+    /*@MessageMapping("/touchgrass")
     public HarisInfo receiveGrassTouching(@Payload HarisInfo info) {
         GrassBot.jda.getChannelById(MessageChannel.class, "1078169935706062928").sendMessage(info.getMessage() + " touched grass!").queue();
 
         return info;
-    }
+    }*/
 }
