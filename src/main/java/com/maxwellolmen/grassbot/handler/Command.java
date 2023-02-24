@@ -1,9 +1,8 @@
 package com.maxwellolmen.grassbot.handler;
 
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public interface Command {
-    
-    public void onCommand(MessageChannel channel, User user, String command);
+
+    public void onCommand(MessageReceivedEvent event, String command);
 }

@@ -7,6 +7,7 @@ import com.maxwellolmen.grassbot.command.*;
 
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandHandler {
 
@@ -14,19 +15,20 @@ public class CommandHandler {
 
     public CommandHandler() {
         commands = new HashMap<>();
-
         commands.put("info", new InfoCommand());
         commands.put("ping", new PingCommand());
+        commands.put("touchgrass", new TouchGrassCommand());
     }
-    
-    public void handle(MessageChannel channel, User user, String command) {
+
+    public void handle(MessageReceivedEvent event, String command) {
         String label = command.split("\\s+")[0].substring(1);
+        /// t! touchgrass @haris
+        // t! , touchgrass, @haris
 
         if (!commands.containsKey(label.toLowerCase())) {
-            channel.sendMessage("Sorry, but that command does not exist.").queue();
+            event.getChannel().sendMessage("Sorry, but that command does not exist.").queue();
             return;
         }
-
-        commands.get(label.toLowerCase()).onCommand(channel, user, command);
+        commands.get(label.toLowerCase()).onCommand(event, command);
     }
 }

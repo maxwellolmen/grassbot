@@ -13,16 +13,17 @@ public class MessageHandler extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (event.getAuthor().getId().equals("1078162609641107486")) return;
+        if (event.getAuthor().getId().equals("1078162609641107486"))
+            return;
 
         if (!event.getChannel().getId().equals("1078169935706062928")) {
             return;
         }
-        
+
         String message = event.getMessage().getContentStripped();
 
         if (message.startsWith("!")) {
-            commandHandler.handle(event.getChannel(), event.getAuthor(), message);
+            commandHandler.handle(event, message);
         }
     }
 }
