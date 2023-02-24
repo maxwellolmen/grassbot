@@ -7,12 +7,14 @@ import com.maxwellolmen.grassbot.handler.MessageHandler;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 @SpringBootApplication
 public class GrassBot {
 
     public static JDA jda;
+    public static Guild ldg;
 
     public static void main(String[] args) {
         // SpringApplication.run(GrassBot.class, new String[] {"--server.port=8082"});
@@ -24,6 +26,17 @@ public class GrassBot {
 
         jda = JDABuilder.createDefault(args[0]).enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS).build();
 
+        while (jda.getGuilds().size() == 0) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Connected to a Guild!");
+
+        ldg = jda.getGuildById("952964020263071765");
         jda.addEventListener(new MessageHandler());
     }
 }
