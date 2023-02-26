@@ -63,11 +63,13 @@ public class TouchGrassCommand implements Command, SQLSaver {
         if (event.getMessage().getMentions().getUsers().size() == 0) {
             event.getChannel().sendMessage("You must mention a user!").queue();
             return;
-        }else if (event.getMessage().getMentions().getUsers().contains(event.getAuthor())){
-            event.getChannel().sendMessage("You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.").queue();
+        } else if (event.getMessage().getMentions().getUsers().contains(event.getAuthor())){
+            event.getChannel()
+                 .sendMessage("You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.")
+                 .queue();
             return;
         }
-
+            
         for (User mentioned : event.getMessage().getMentions().getUsers()) {
             if (cooldownMap.containsKey(mentioned.getId())
                     && System.currentTimeMillis() - cooldownMap.get(mentioned.getId()) < 86400000) {
@@ -80,13 +82,17 @@ public class TouchGrassCommand implements Command, SQLSaver {
 
             touchGrassCounter.put(mentioned.getId(), touchGrassCounter.getOrDefault(mentioned.getId(), 0) + 1);
             // event.getMessage().delete().queue();
-            //event.getChannel().sendMessage("Go fucking touch some grass, " + mentioned.getAsMention()).queue();
-            event.getChannel().sendMessage(pickRandomMsg(touchGrassMsgs) + mentioned.getAsMention()).queue();
+            String grassMsg;
+            if (mentioned.getId() == "1078162609641107486") { // GrassBot's ID
+                grassMsg = "You're telling me, GrassBot, to touch grass? Alright sure, if it makes you feel better about yourself... ";
+            } else {
+                grassMsg = pickRandomMsg(touchGrassMsgs) + mentioned.getAsMention();
+            }
             event.getChannel()
-                    .sendMessage("Grass Counter Increased by one. " + mentioned.getName() + "'s count is now "
-                            + touchGrassCounter.get(mentioned.getId())
-                            + ".")
-                    .queue();
+                 .sendMessage(grassMsg + "\n"
+                            + "Grass Counter Increased by one. " + mentioned.getName() + "'s count is now "
+                            + touchGrassCounter.get(mentioned.getId()) + ".")
+                 .queue();
             cooldownMap.put(mentioned.getId(), System.currentTimeMillis());
         }
     }
