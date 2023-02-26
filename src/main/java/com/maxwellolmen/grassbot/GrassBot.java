@@ -18,7 +18,9 @@ public class GrassBot {
     public static Guild ldg;
 
     public static SQLManager sqlManager;
-
+    public static JDA getJDA(){
+        return jda;
+    }
     public static void main(String[] args) {
         // SpringApplication.run(GrassBot.class, new String[] {"--server.port=8082"});
 
