@@ -34,6 +34,9 @@ public class TouchGrassCommand implements Command, SQLSaver {
         if (event.getMessage().getMentions().getUsers().size() == 0) {
             event.getChannel().sendMessage("You must mention a user!").queue();
             return;
+        }else if (event.getMessage().getMentions().getUsers().contains(event.getAuthor())){
+            event.getChannel().sendMessage("You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.").queue();
+            return;
         }
 
         for (User mentioned : event.getMessage().getMentions().getUsers()) {

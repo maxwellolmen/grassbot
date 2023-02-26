@@ -32,9 +32,12 @@ public class TouchGrassLeaderboardCommand implements Command, SQLSaver {
             
             int place = 0;
             for (String key: sorted.keySet()){
+                if (place == 10){
+                    break;
+                }
                 place++;
                 User user = GrassBot.getJDA().retrieveUserById(key).complete();
-                message += place + ": " + user.getName() + "\n";  
+                message += place + ": " + user.getName() + " " + map.get(user.getId())+ "\n";  
             }
             event.getChannel()
             .sendMessage("Grass Leaderboard!!!!\n" + message)
