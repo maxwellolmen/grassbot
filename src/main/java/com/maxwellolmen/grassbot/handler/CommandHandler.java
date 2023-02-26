@@ -18,13 +18,15 @@ public class CommandHandler {
         commands.put("info", new InfoCommand());
         commands.put("ping", new PingCommand());
         commands.put("touchgrass", new TouchGrassCommand());
+        commands.put("touchgrassleaderboard", new TouchGrassLeaderboardCommand());
+
     }
 
     public void handle(MessageReceivedEvent event, String command) {
         String label = command.split("\\s+")[0].substring(1);
         /// t! touchgrass @haris
         // t! , touchgrass, @haris
-
+        // event.getChannel().sendMessage("label:" + label).queue();
         if (!commands.containsKey(label.toLowerCase())) {
             event.getChannel().sendMessage("Sorry, but that command does not exist.").queue();
             return;
