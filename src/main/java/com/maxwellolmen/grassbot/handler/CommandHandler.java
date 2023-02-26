@@ -20,6 +20,7 @@ public class CommandHandler {
         commands.put("touchgrass", new TouchGrassCommand());
         commands.put("touchgrassleaderboard", new TouchGrassLeaderboardCommand());
 
+        commands.put("help", new HelpCommand(commands));
     }
 
     public void handle(MessageReceivedEvent event, String command) {
