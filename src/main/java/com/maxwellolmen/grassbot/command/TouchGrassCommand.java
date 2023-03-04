@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.maxwellolmen.grassbot.GrassBot;
 import com.maxwellolmen.grassbot.handler.Command;
@@ -68,17 +69,20 @@ public class TouchGrassCommand implements Command, SQLSaver {
                  .sendMessage("You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.")
                  .queue();
             return;
-        }
-            
-        for (User mentioned : event.getMessage().getMentions().getUsers()) {
-            if (cooldownMap.containsKey(mentioned.getId())
-                    && System.currentTimeMillis() - cooldownMap.get(mentioned.getId()) < 86400000) {
+        }else if (System.currentTimeMillis() - cooldownMap.get(event.getAuthor().getId()) < 86400000){
+            event.getChannel()
+            .sendMessage("You already told someone to touch grass today. Try again in " + TimeUnit.MILLISECONDS.toHours(86400000 - System.currentTimeMillis()) + " hours.")
+            .queue();
+            int index = (int)(Math.random() * 10);
+            if (index == 1){
                 event.getChannel()
-                        .sendMessage(mentioned.getName()
-                                + " has already been told to touch grass again. Try again after 24 hours.")
-                        .queue();
-                return;
+                .sendMessage("Perhaps a good alternative would be to follow your own advice. \n However, it seems that people are good at giving advice, but not following it, so it's all up to you.")
+                .queue(); 
             }
+       return;
+        }
+          
+        for (User mentioned : event.getMessage().getMentions().getUsers()) {
 
             touchGrassCounter.put(mentioned.getId(), touchGrassCounter.getOrDefault(mentioned.getId(), 0) + 1);
             // event.getMessage().delete().queue();
@@ -93,7 +97,7 @@ public class TouchGrassCommand implements Command, SQLSaver {
                             + "Grass Counter Increased by one. " + mentioned.getName() + "'s count is now "
                             + touchGrassCounter.get(mentioned.getId()) + ".")
                  .queue();
-            cooldownMap.put(mentioned.getId(), System.currentTimeMillis());
+            cooldownMap.put(event.getAuthor().getId(), System.currentTimeMillis());
         }
     }
 
