@@ -69,14 +69,14 @@ public class TouchGrassCommand implements Command, SQLSaver {
                  .sendMessage("You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.")
                  .queue();
             return;
-        }else if (System.currentTimeMillis() - cooldownMap.get(event.getAuthor().getId()) < 86400000){
+        }else if (cooldownMap.containsKey(event.getAuthor().getId()) && System.currentTimeMillis() - cooldownMap.get(event.getAuthor().getId()) < 86400000){
             event.getChannel()
-            .sendMessage("You already told someone to touch grass today. Try again in " + TimeUnit.MILLISECONDS.toHours(86400000 - System.currentTimeMillis()) + " hours.")
+            .sendMessage("You already told someone to touch grass today. Try again in " + ( TimeUnit.MILLISECONDS.toHours((86400000 + System.currentTimeMillis()) - System.currentTimeMillis())) + " hours.")
             .queue();
             int index = (int)(Math.random() * 10);
             if (index == 1){
                 event.getChannel()
-                .sendMessage("Perhaps a good alternative would be to follow your own advice. \n However, it seems that people are good at giving advice, but not following it, so it's all up to you.")
+                .sendMessage("Perhaps a good alternative would be to follow your own advice.\nHowever, it seems that people are good at giving advice but not following it, so it's all up to you.")
                 .queue(); 
             }
        return;
