@@ -71,7 +71,7 @@ public class TouchGrassCommand implements Command, SQLSaver {
             return;
         }else if (cooldownMap.containsKey(event.getAuthor().getId()) && System.currentTimeMillis() - cooldownMap.get(event.getAuthor().getId()) < 86400000){
             event.getChannel()
-            .sendMessage("You already told someone to touch grass today. Try again in " + ( TimeUnit.MILLISECONDS.toHours((86400000 + cooldownMap.get(event.getAuthor().getId())) - System.currentTimeMillis())) + " hours.")
+            .sendMessage(event.getAuthor().getName() + " already told someone to touch grass today. Try again in " + ( TimeUnit.MILLISECONDS.toHours((86400000 + cooldownMap.get(event.getAuthor().getId())) - System.currentTimeMillis())) + " hours.")
             .queue();
             int index = (int)(Math.random() * 10);
             if (index == 1){
