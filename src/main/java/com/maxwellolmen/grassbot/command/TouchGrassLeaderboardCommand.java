@@ -40,8 +40,10 @@ public class TouchGrassLeaderboardCommand implements Command, SQLSaver {
             String[] topIds = GrassBot.sqlManager.getTopGrassCounts();
 
             String username;
+            int i = 1;
             for (String id : topIds) {
-                Member member = GrassBot.getJDA().getGuildById("952964020263071765").getMemberById(id);
+                User user = GrassBot.getJDA().retrieveUserById(id).complete();
+                Member member = GrassBot.getJDA().getGuildById("952964020263071765").retrieveMember(user).complete();
 
                 if (member == null) {
                     username = "Unknown Member";
@@ -53,7 +55,8 @@ public class TouchGrassLeaderboardCommand implements Command, SQLSaver {
                     sb.append('\n');
                 }
 
-                sb.append(username + ": " + TouchGrassCommand.touchGrassCounter.get(id));
+                sb.append(i + " - " + username + ": " + TouchGrassCommand.touchGrassCounter.get(id));
+                i++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
