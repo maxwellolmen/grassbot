@@ -16,45 +16,52 @@ import com.maxwellolmen.grassbot.GrassBot;
 import com.maxwellolmen.grassbot.handler.Command;
 import com.maxwellolmen.grassbot.sql.SQLSaver;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+import java.awt.Color;
 
 public class TouchGrassLeaderboardCommand implements Command, SQLSaver {
     @Override
     public void onCommand(MessageReceivedEvent event, String command) {
-        String message = "";
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setTitle("Grass Leaderboard!!!");
+        eb.setColor(Color.GREEN);
+        
+        StringBuilder sb = new StringBuilder();
+
         try {
-            Map<String, Integer> map = GrassBot.sqlManager.getGrassCounts();
-            Map<String, Integer> sorted =
-            map.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toMap(
-                Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));;
-            
-            int place = 0;
-            for (String key: sorted.keySet()){
-                if (place == 10){
-                    break;
+            GrassBot.sqlManager.autosave();
+
+            String[] topIds = GrassBot.sqlManager.getTopGrassCounts();
+
+            String username;
+            for (String id : topIds) {
+                Member member = GrassBot.getJDA().getGuildById("952964020263071765").getMemberById(id);
+
+                if (member == null) {
+                    username = "Unknown Member";
+                } else {
+                    username = member.getEffectiveName();
                 }
-                place++;
-                User user = GrassBot.getJDA().retrieveUserById(key).complete();
-                message += place + ": " + user.getName() + " " + map.get(user.getId())+ "\n";  
+
+                if (!id.equals(topIds[0])) {
+                    sb.append('\n');
+                }
+
+                sb.append(username + ": " + TouchGrassCommand.touchGrassCounter.get(id));
             }
-            event.getChannel()
-            .sendMessage("Grass Leaderboard!!!!\n" + message)
-            .queue();
-            Iterator<String> namesIterator = sorted.keySet().iterator();
-            if (namesIterator.hasNext()){
-                User firstPlace = GrassBot.getJDA().retrieveUserById(namesIterator.next()).complete();
-                event.getChannel()
-                .sendMessage(firstPlace.getName() + " really needs to touch some grass!!!!")
-                .queue();
-            }
-           
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
+        eb.setDescription(sb.toString());
+
+        event.getChannel().sendMessageEmbeds(eb.build()).queue();
     }
 
     @Override

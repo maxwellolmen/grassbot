@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class TouchGrassCommand implements Command, SQLSaver {
-    private Map<String, Integer> touchGrassCounter;
+    public static Map<String, Integer> touchGrassCounter;
     private Map<String, Long> cooldownMap;
     private List<String> touchGrassMsgs;
     Clock baseClock = Clock.systemDefaultZone();

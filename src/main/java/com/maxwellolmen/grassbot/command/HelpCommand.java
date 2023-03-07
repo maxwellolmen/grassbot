@@ -24,6 +24,7 @@ public class HelpCommand implements Command {
         for (Map.Entry<String, Command> set : commands.entrySet()) {
             message += "!" + set.getKey() + "\n";
         }
+        
         event.getChannel().sendMessage(message).queue();
     }
 }

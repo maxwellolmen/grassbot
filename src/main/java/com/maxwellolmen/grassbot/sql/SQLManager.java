@@ -77,6 +77,23 @@ public class SQLManager {
         return grassCounts;
     }
 
+    public String[] getTopGrassCounts() throws SQLException {
+        verifyOpen();
+
+        Statement st = connection.createStatement();
+
+        ResultSet rs = st.executeQuery("SELECT id FROM grasscounts SORT BY count DESC LIMIT 10;");
+        String[] ids = new String[10];
+
+        int i = 0;
+        while (rs.next()) {
+            ids[i] = rs.getString(0);
+            i++;
+        }
+
+        return ids;
+    }
+
     public void addSaver(SQLSaver saver) {
         savers.add(saver);
     }
