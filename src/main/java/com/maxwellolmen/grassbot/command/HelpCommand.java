@@ -24,8 +24,14 @@ public class HelpCommand implements Command {
     public void onCommand(MessageReceivedEvent event, String command) {
         StringBuilder sb = new StringBuilder();
         
-        for (Map.Entry<String, Command> set : commands.entrySet()) {
-            sb.append("!").append(set.getKey()).append("\n");
+        for (Map.Entry<String, Command> entry : commands.entrySet()) {
+            sb.append("!").append(entry.getKey()).append("\n");
+
+            if (entry.getValue().getUsage() != null) {
+                sb.append("  ").append("Usage: ").append(entry.getValue().getUsage());
+            }
+
+            sb.append("  ").append(entry.getValue().getDescription());
         }
         
         EmbedBuilder eb = new EmbedBuilder();
@@ -34,5 +40,15 @@ public class HelpCommand implements Command {
         eb.setDescription(sb.toString());
 
         event.getChannel().sendMessageEmbeds(eb.build()).queue();
+    }
+
+    @Override
+    public String getUsage() {
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Show commands and how to use them.";
     }
 }

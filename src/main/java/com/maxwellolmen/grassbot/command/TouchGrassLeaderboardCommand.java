@@ -24,7 +24,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.Color;
 
-public class TouchGrassLeaderboardCommand implements Command, SQLSaver {
+public class TouchGrassLeaderboardCommand implements Command {
+
     @Override
     public void onCommand(MessageReceivedEvent event, String command) {
         EmbedBuilder eb = new EmbedBuilder();
@@ -68,9 +69,12 @@ public class TouchGrassLeaderboardCommand implements Command, SQLSaver {
     }
 
     @Override
-    public void autosave() throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'autosave'");
+    public String getUsage() {
+        return null;
     }
-    
+
+    @Override
+    public String getDescription() {
+        return "Examine those who need the most grass-touching.";
+    }
 }

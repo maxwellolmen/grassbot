@@ -5,4 +5,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public interface Command {
 
     public void onCommand(MessageReceivedEvent event, String command);
+
+    public String getUsage();
+    public String getDescription();
 }

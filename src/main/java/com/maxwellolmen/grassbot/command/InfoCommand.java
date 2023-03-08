@@ -23,4 +23,14 @@ public class InfoCommand implements Command {
 
         event.getChannel().sendMessageEmbeds(eb.build()).queue();
     }
+
+    @Override
+    public String getUsage() {
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Get basic information about the server.";
+    }
 }

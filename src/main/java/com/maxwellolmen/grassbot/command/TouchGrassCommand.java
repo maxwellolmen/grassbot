@@ -116,4 +116,14 @@ public class TouchGrassCommand implements Command, SQLSaver {
         GrassBot.sqlManager.saveGrassCounts(touchGrassCounter);
         GrassBot.sqlManager.saveGrassCooldowns(cooldownMap);
     }
+
+    @Override
+    public String getUsage() {
+        return "!touchgrass <user>";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Remind someone that they really need some grass-touching.";
+    }
 }
