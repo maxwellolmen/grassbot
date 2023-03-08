@@ -28,10 +28,10 @@ public class HelpCommand implements Command {
             sb.append("!").append(entry.getKey()).append("\n");
 
             if (entry.getValue().getUsage() != null) {
-                sb.append("  ").append("Usage: ").append(entry.getValue().getUsage());
+                sb.append("---   ").append("Usage: ").append(entry.getValue().getUsage()).append("\n");
             }
 
-            sb.append("  ").append(entry.getValue().getDescription());
+            sb.append("---   ").append(entry.getValue().getDescription()).append("\n");
         }
         
         EmbedBuilder eb = new EmbedBuilder();
