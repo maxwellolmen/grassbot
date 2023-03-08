@@ -3,7 +3,6 @@ package com.maxwellolmen.grassbot.command;
 import java.sql.SQLException;
 import java.time.Clock;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -24,11 +23,11 @@ public class TouchGrassCommand implements Command, SQLSaver {
     public TouchGrassCommand() {
         try {
             touchGrassCounter = GrassBot.sqlManager.getGrassCounts();
+            cooldownMap = GrassBot.sqlManager.getGrassCooldowns();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        cooldownMap = new HashMap<>();
         touchGrassMsgs = initTouchGrassMsgs();
 
         GrassBot.sqlManager.addSaver(this);
@@ -46,16 +45,18 @@ public class TouchGrassCommand implements Command, SQLSaver {
         list.add("No shower AND haven't touched grass yet? Geez, ");
         
         // 10% chance of adding nice message :) (AND EVEN SMALLER CHANCE OF BEING PICKED!)
-        if((int)(Math.random()*10) == 1) {
+        if ((int) (Math.random() * 10) == 1) {
             list.add("Hmm... you look like you're doing well, no need to touch grass ;) Have a great day! ");
         }
+
         return list;
     }
 
     // Generates number 0..1, scaled to list size and typeset to int
     // (you can change it to use Random if u want)
     private String pickRandomMsg(List<String> list) {
-        int index = (int)(Math.random() * list.size());
+        int index = (int) (Math.random() * list.size());
+
         return list.get(index);
     }
 
@@ -63,42 +64,47 @@ public class TouchGrassCommand implements Command, SQLSaver {
     public void onCommand(MessageReceivedEvent event, String command) {
         if (event.getMessage().getMentions().getUsers().size() == 0) {
             event.getChannel().sendMessage("You must mention a user!").queue();
+
             return;
-        } else if (event.getMessage().getMentions().getUsers().contains(event.getAuthor())){
+        } else if (event.getMessage().getMentions().getUsers().contains(event.getAuthor())) {
             event.getChannel()
-                 .sendMessage("You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.")
-                 .queue();
+                .sendMessage("You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.")
+                .queue();
+
             return;
-        }else if (cooldownMap.containsKey(event.getAuthor().getId()) && System.currentTimeMillis() - cooldownMap.get(event.getAuthor().getId()) < 86400000){
+        } else if (cooldownMap.containsKey(event.getAuthor().getId()) && System.currentTimeMillis() - cooldownMap.get(event.getAuthor().getId()) < 86400000){
             event.getChannel()
-            .sendMessage(event.getAuthor().getName() + " already told someone to touch grass today. Try again in " + ( TimeUnit.MILLISECONDS.toHours((86400000 + cooldownMap.get(event.getAuthor().getId())) - System.currentTimeMillis())) + " hours.")
-            .queue();
-            int index = (int)(Math.random() * 10);
+                .sendMessage(event.getAuthor().getName() + " already told someone to touch grass today. Try again in " + ( TimeUnit.MILLISECONDS.toHours((86400000 + cooldownMap.get(event.getAuthor().getId())) - System.currentTimeMillis())) + " hours.")
+                .queue();
+
+            int index = (int) (Math.random() * 10);
+
             if (index == 1){
                 event.getChannel()
-                .sendMessage("Perhaps a good alternative would be to follow your own advice.\nHowever, it seems that people are good at giving advice but not following it, so it's all up to you.")
-                .queue(); 
+                    .sendMessage("Perhaps a good alternative would be to follow your own advice.\nHowever, it seems that people are good at giving advice but not following it, so it's all up to you.")
+                    .queue(); 
             }
-       return;
-        }
-            User target = event.getMessage().getMentions().getUsers().get(0);
-        // for (User mentioned : event.getMessage().getMentions().getUsers()) {
 
-            touchGrassCounter.put(target.getId(), touchGrassCounter.getOrDefault(target.getId(), 0) + 1);
-            // event.getMessage().delete().queue();
-            String grassMsg;
-            if (target.getId() == "1078162609641107486") { // GrassBot's ID
-                grassMsg = "You're telling me, GrassBot, to touch grass? Alright sure, if it makes you feel better about yourself... ";
-            } else {
-                grassMsg = pickRandomMsg(touchGrassMsgs) + target.getAsMention();
-            }
-            event.getChannel()
-                 .sendMessage(grassMsg + "\n"
+            return;
+        }
+        
+        User target = event.getMessage().getMentions().getUsers().get(0);
+        
+        touchGrassCounter.put(target.getId(), touchGrassCounter.getOrDefault(target.getId(), 0) + 1);
+
+        String grassMsg;
+        if (target.getId() == "1078162609641107486") { // GrassBot's ID
+            grassMsg = "You're telling me, GrassBot, to touch grass? Alright sure, if it makes you feel better about yourself... ";
+        } else {
+            grassMsg = pickRandomMsg(touchGrassMsgs) + target.getAsMention();
+        }
+
+        event.getChannel()
+            .sendMessage(grassMsg + "\n"
                             + "Grass Counter Increased by one. " + target.getName() + "'s count is now "
                             + touchGrassCounter.get(target.getId()) + ".")
-                 .queue();
-            cooldownMap.put(event.getAuthor().getId(), System.currentTimeMillis());
-        // }
+            .queue();
+        cooldownMap.put(event.getAuthor().getId(), System.currentTimeMillis());
     }
 
     public Map<String, Integer> getGrassCounts() {
@@ -108,5 +114,6 @@ public class TouchGrassCommand implements Command, SQLSaver {
     @Override
     public void autosave() throws SQLException {
         GrassBot.sqlManager.saveGrassCounts(touchGrassCounter);
+        GrassBot.sqlManager.saveGrassCooldowns(cooldownMap);
     }
 }

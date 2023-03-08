@@ -36,6 +36,7 @@ public class SQLManager {
     public void initTables() throws SQLException {
         Statement st = connection.createStatement();
         st.execute("CREATE TABLE IF NOT EXISTS grasscounts (id VARCHAR(32), count INT(8));");
+        st.execute("CREATE TABLE IF NOT EXISTS grasscooldowns (id VARCHAR(32), timestamp BIGINT);");
         st.close();
     }
 
@@ -62,6 +63,23 @@ public class SQLManager {
         }
     }
 
+    public void saveGrassCooldowns(Map<String, Long> grassCooldowns) throws SQLException {
+        verifyOpen();
+
+        for (Map.Entry<String, Long> entry : grassCooldowns.entrySet()) {
+            PreparedStatement pst = connection.prepareStatement("DELETE FROM grasscooldowns WHERE id=?;");
+            pst.setString(1, entry.getKey());
+            pst.execute();
+            pst.close();
+
+            pst = connection.prepareStatement("INSERT INTO grasscooldowns (id, timestamp) VALUES (?, ?);");
+            pst.setString(1, entry.getKey());
+            pst.setLong(2, entry.getValue());
+            pst.execute();
+            pst.close();
+        }
+    }
+
     public Map<String, Integer> getGrassCounts() throws SQLException {
         verifyOpen();
 
@@ -75,6 +93,21 @@ public class SQLManager {
         }
 
         return grassCounts;
+    }
+
+    public Map<String, Long> getGrassCooldowns() throws SQLException {
+        verifyOpen();
+
+        Statement st = connection.createStatement();
+
+        ResultSet rs = st.executeQuery("SELECT id, timestamp FROM grasscooldowns;");
+        Map<String, Long> grassCooldowns = new HashMap<>();
+
+        while (rs.next()) {
+            grassCooldowns.put(rs.getString("id"), rs.getLong("timestamp"));
+        }
+
+        return grassCooldowns;
     }
 
     public String[] getTopGrassCounts() throws SQLException {
