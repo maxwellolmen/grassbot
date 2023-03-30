@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.awt.Color;
 
@@ -31,8 +32,12 @@ public class TouchGrassLeaderboardCommand implements Command {
             String username;
             int i = 1;
             for (String id : topIds) {
-                User user = GrassBot.getJDA().retrieveUserById(id).complete();
-                Member member = GrassBot.getJDA().getGuildById("952964020263071765").retrieveMember(user).complete();
+                User user = null;
+                Member member = null;
+                try {
+                    user = GrassBot.getJDA().retrieveUserById(id).complete();
+                    member = GrassBot.getJDA().getGuildById("952964020263071765").retrieveMember(user).complete();
+                } catch (NullPointerException | ErrorResponseException e) {}
 
                 if (member == null) {
                     username = "Unknown Member";
