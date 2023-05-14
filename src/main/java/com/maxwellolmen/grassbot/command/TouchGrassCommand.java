@@ -5,6 +5,7 @@ import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.maxwellolmen.grassbot.GrassBot;
@@ -66,7 +67,7 @@ public class TouchGrassCommand implements Command, SQLSaver {
             event.getChannel().sendMessage("You must mention a user!").queue();
 
             return;
-        } else if (event.getMessage().getMentions().getUsers().contains(event.getAuthor())) {
+        }else if (event.getMessage().getMentions().getUsers().contains(event.getAuthor())) {
             event.getChannel()
                 .sendMessage("You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.")
                 .queue();
