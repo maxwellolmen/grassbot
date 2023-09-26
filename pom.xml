@@ -17,6 +17,7 @@
 		<java.version>17</java.version>
 		<start-class>com.maxwellolmen.grassbot.GrassBot</start-class>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
