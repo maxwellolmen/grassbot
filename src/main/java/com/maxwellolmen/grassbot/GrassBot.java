@@ -1,6 +1,5 @@
 package com.maxwellolmen.grassbot;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.maxwellolmen.grassbot.handler.MessageHandler;
@@ -18,9 +17,11 @@ public class GrassBot {
     public static Guild ldg;
 
     public static SQLManager sqlManager;
-    public static JDA getJDA(){
+
+    public static JDA getJDA() {
         return jda;
     }
+
     public static void main(String[] args) {
         // SpringApplication.run(GrassBot.class, new String[] {"--server.port=8082"});
 
@@ -32,7 +33,8 @@ public class GrassBot {
         sqlManager = new SQLManager();
         sqlManager.init();
 
-        jda = JDABuilder.createDefault(args[0]).enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS).build();
+        jda = JDABuilder.createDefault(args[0])
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS).build();
 
         while (jda.getGuilds().size() == 0) {
             try {
@@ -56,7 +58,7 @@ public class GrassBot {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-    
+
                     sqlManager.autosave();
                 }
             }
