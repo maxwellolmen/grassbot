@@ -161,6 +161,10 @@ public class TouchGrassCommand implements Command, SQLSaver {
                     break;
                 }
             }
+
+            if (i == 10) {
+                break;
+            }
         }
 
         return ids;
