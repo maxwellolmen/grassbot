@@ -24,16 +24,22 @@ public class ScheduleHandler {
 
             int oldCount = TouchGrassCommand.getCount(randomId);
             int newCount;
+            double percentage;
             if (rand > 0.99) {
-                newCount = TouchGrassCommand.scaleCount(randomId, 0.5);
+                percentage = 0.5;
             } else if (rand > 0.8) {
-                newCount = TouchGrassCommand.scaleCount(randomId, 0.8);
+                percentage = 0.2;
             } else {
-                newCount = TouchGrassCommand.scaleCount(randomId, 0.9);
+                percentage = 0.1;
             }
 
+            newCount = TouchGrassCommand.scaleCount(randomId, 1 - percentage);
+
             channel.sendMessage("The time is here! Congratulations <@" + randomId
-                    + ">, your grass count has been reduced from " + oldCount + " to " + newCount + "! See you next Monday @ 9pm Central, where a random user will be selected for a random decrease in their grasscount :)").queue();
+                    + ">, your grass count has been reduced from " + oldCount + " to " + newCount + "for a decrease of "
+                    + percentage
+                    + "%! See you next Monday @ 9pm Central, where a random user will be selected for a random decrease in their grasscount :)")
+                    .queue();
         }
     }
 
