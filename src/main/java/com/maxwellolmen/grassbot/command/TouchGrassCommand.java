@@ -101,7 +101,14 @@ public class TouchGrassCommand implements Command, SQLSaver {
 
         int count = getCount(target.getId());
         touchGrassCounter.get(count).remove(target.getId());
-        touchGrassCounter.get(count + 1).add(target.getId());
+
+        if (touchGrassCounter.containsKey(count + 1)) {
+            touchGrassCounter.get(count + 1).add(target.getId());
+        } else {
+            ArrayList<String> ids = new ArrayList<>();
+            ids.add(target.getId());
+            touchGrassCounter.put(count + 1, ids);
+        }
 
         String grassMsg;
         if (target.getId() == "1078162609641107486") { // GrassBot's ID
