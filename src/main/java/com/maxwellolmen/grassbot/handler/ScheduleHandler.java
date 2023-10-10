@@ -18,33 +18,39 @@ public class ScheduleHandler {
         @Override
         public void run() {
             TextChannel channel = GrassBot.jda.getTextChannelById(1078169935706062928L);
-            
+
             String randomId;
             do {
                 randomId = TouchGrassCommand.getRandomId();
             } while (TouchGrassCommand.getCount(randomId) == 0);
 
-            double rand = new Random().nextDouble();
-
-            int oldCount = TouchGrassCommand.getCount(randomId);
-            int newCount;
-            double percentage;
-            if (rand > 0.99) {
-                percentage = 0.5;
-            } else if (rand > 0.8) {
-                percentage = 0.2;
+            if (randomId.equals("188824295445757952")) {
+                channel.sendMessage(
+                        "Whoops! Seems like the randomly selected user was <@188824295445757952>. We don't want *that* GrassCount to decrease, right? See you next Monday @ 9pm Central, where a random user will be selected for a random decrease in their GrassCount :)")
+                        .queue();
             } else {
-                percentage = 0.1;
+                double rand = new Random().nextDouble();
+
+                int oldCount = TouchGrassCommand.getCount(randomId);
+                int newCount;
+                double percentage;
+                if (rand > 0.99) {
+                    percentage = 0.5;
+                } else if (rand > 0.8) {
+                    percentage = 0.2;
+                } else {
+                    percentage = 0.1;
+                }
+
+                newCount = TouchGrassCommand.scaleCount(randomId, 1 - percentage);
+
+                channel.sendMessage("The time is here! Congratulations <@" + randomId
+                        + ">, your grass count has been reduced from " + oldCount + " to " + newCount
+                        + " for a decrease of "
+                        + ((int) percentage * 100)
+                        + "%! See you next Monday @ 9pm Central, where a random user will be selected for a random decrease in their GrassCount :)")
+                        .queue();
             }
-
-            newCount = TouchGrassCommand.scaleCount(randomId, 1 - percentage);
-
-            channel.sendMessage("The time is here! Congratulations <@" + randomId
-                    + ">, your grass count has been reduced from " + oldCount + " to " + newCount
-                    + " for a decrease of "
-                    + ((int) percentage * 100)
-                    + "%! See you next Monday @ 9pm Central, where a random user will be selected for a random decrease in their grasscount :)")
-                    .queue();
 
             initLottery();
         }
