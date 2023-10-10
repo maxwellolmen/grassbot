@@ -36,7 +36,7 @@ public class ScheduleHandler {
             newCount = TouchGrassCommand.scaleCount(randomId, 1 - percentage);
 
             channel.sendMessage("The time is here! Congratulations <@" + randomId
-                    + ">, your grass count has been reduced from " + oldCount + " to " + newCount + "for a decrease of "
+                    + ">, your grass count has been reduced from " + oldCount + " to " + newCount + " for a decrease of "
                     + percentage
                     + "%! See you next Monday @ 9pm Central, where a random user will be selected for a random decrease in their grasscount :)")
                     .queue();
@@ -57,7 +57,12 @@ public class ScheduleHandler {
         calendar.set(Calendar.HOUR_OF_DAY, 21);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
+
         Date timeToRun = calendar.getTime();
+        
+        if (System.currentTimeMillis() > timeToRun.getTime()) {
+            timeToRun.setTime(timeToRun.getTime() + 86400000);
+        }
 
         timer.schedule(lotteryTask, timeToRun);
     }
