@@ -3,6 +3,7 @@ package com.maxwellolmen.grassbot;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.maxwellolmen.grassbot.handler.MessageHandler;
+import com.maxwellolmen.grassbot.handler.ScheduleHandler;
 import com.maxwellolmen.grassbot.sql.SQLManager;
 
 import net.dv8tion.jda.api.JDA;
@@ -64,6 +65,6 @@ public class GrassBot {
             }
         }.start();
 
-        new ScheduleHandler(this);
+        new ScheduleHandler();
     }
 }
