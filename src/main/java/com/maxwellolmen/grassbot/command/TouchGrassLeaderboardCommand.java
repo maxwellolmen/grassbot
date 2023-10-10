@@ -1,15 +1,10 @@
 package com.maxwellolmen.grassbot.command;
 
-import java.sql.SQLException;
-
 import com.maxwellolmen.grassbot.GrassBot;
 import com.maxwellolmen.grassbot.handler.Command;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.awt.Color;
 

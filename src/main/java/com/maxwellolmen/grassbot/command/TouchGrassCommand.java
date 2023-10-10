@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import com.maxwellolmen.grassbot.GrassBot;
 import com.maxwellolmen.grassbot.handler.Command;
 import com.maxwellolmen.grassbot.sql.SQLSaver;
 
+import lombok.val;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -100,15 +102,7 @@ public class TouchGrassCommand implements Command, SQLSaver {
         User target = event.getMessage().getMentions().getUsers().get(0);
 
         int count = getCount(target.getId());
-        touchGrassCounter.get(count).remove(target.getId());
-
-        if (touchGrassCounter.containsKey(count + 1)) {
-            touchGrassCounter.get(count + 1).add(target.getId());
-        } else {
-            ArrayList<String> ids = new ArrayList<>();
-            ids.add(target.getId());
-            touchGrassCounter.put(count + 1, ids);
-        }
+        updateCount(target.getId(), count + 1);
 
         String grassMsg;
         if (target.getId() == "1078162609641107486") { // GrassBot's ID
@@ -171,5 +165,40 @@ public class TouchGrassCommand implements Command, SQLSaver {
         }
 
         return ids;
+    }
+
+    public static String getRandomId() {
+        List<String> ids = new ArrayList<>();
+
+        for (List<String> value : touchGrassCounter.values()) {
+            ids.addAll(value);
+        }
+
+        int index = (new Random()).nextInt(ids.size());
+
+        return ids.get(index);
+    }
+
+    public static void updateCount(String id, int count) {
+        int prevCount = getCount(id);
+
+        touchGrassCounter.get(prevCount).remove(id);
+
+        if (touchGrassCounter.containsKey(count)) {
+            touchGrassCounter.get(count).add(id);
+        } else {
+            List<String> ids = new ArrayList<>();
+            ids.add(id);
+            touchGrassCounter.put(count, ids);
+        }
+    }
+
+    public static int scaleCount(String id, double percentage) {
+        int count = getCount(id);
+        count *= percentage;
+
+        updateCount(id, ((int) percentage * count));
+
+        return count;
     }
 }

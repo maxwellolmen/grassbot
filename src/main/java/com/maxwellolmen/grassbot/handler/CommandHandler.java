@@ -5,8 +5,6 @@ import java.util.Map;
 
 import com.maxwellolmen.grassbot.command.*;
 
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class CommandHandler {

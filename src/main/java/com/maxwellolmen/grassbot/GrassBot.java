@@ -63,5 +63,7 @@ public class GrassBot {
                 }
             }
         }.start();
+
+        new ScheduleHandler(this);
     }
 }
