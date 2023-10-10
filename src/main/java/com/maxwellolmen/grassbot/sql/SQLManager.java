@@ -1,13 +1,23 @@
 package com.maxwellolmen.grassbot.sql;
 
 import java.sql.*;
+import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 public class SQLManager {
-    
+
+    class ReverseComp implements Comparator<Integer> {
+        public int compare(Integer o1, Integer o2) {
+            return o2.compareTo(o1);
+        }
+    }
+
     private Connection connection;
 
     private ArrayList<SQLSaver> savers;
@@ -46,20 +56,24 @@ public class SQLManager {
         }
     }
 
-    public void saveGrassCounts(Map<String, Integer> grassCounts) throws SQLException {
+    public void saveGrassCounts(Map<Integer, List<String>> grassCounts) throws SQLException {
         verifyOpen();
 
-        for (Map.Entry<String, Integer> entry : grassCounts.entrySet()) {
-            PreparedStatement pst = connection.prepareStatement("DELETE FROM grasscounts WHERE id=?;");
-            pst.setString(1, entry.getKey());
-            pst.execute();
-            pst.close();
+        for (Map.Entry<Integer, List<String>> entry : grassCounts.entrySet()) {
+            int count = entry.getKey();
 
-            pst = connection.prepareStatement("INSERT INTO grasscounts (id, count) VALUES (?, ?);");
-            pst.setString(1, entry.getKey());
-            pst.setInt(2, entry.getValue());
-            pst.execute();
-            pst.close();
+            for (String id : entry.getValue()) {
+                PreparedStatement pst = connection.prepareStatement("DELETE FROM grasscounts WHERE id=?;");
+                pst.setString(1, id);
+                pst.execute();
+                pst.close();
+
+                pst = connection.prepareStatement("INSERT INTO grasscounts (id, count) VALUES (?, ?);");
+                pst.setString(1, id);
+                pst.setInt(2, count);
+                pst.execute();
+                pst.close();
+            }
         }
     }
 
@@ -80,16 +94,23 @@ public class SQLManager {
         }
     }
 
-    public Map<String, Integer> getGrassCounts() throws SQLException {
+    public Map<Integer, List<String>> getGrassCounts() throws SQLException {
         verifyOpen();
 
         Statement st = connection.createStatement();
 
         ResultSet rs = st.executeQuery("SELECT id, count FROM grasscounts;");
-        Map<String, Integer> grassCounts = new HashMap<>();
+        Map<Integer, List<String>> grassCounts = new TreeMap<>(new ReverseComp());
 
         while (rs.next()) {
-            grassCounts.put(rs.getString("id"), rs.getInt("count"));
+            int count = rs.getInt("count");
+            String id = rs.getString("id");
+
+            if (grassCounts.containsKey(count)) {
+                grassCounts.get(count).add(id);
+            } else {
+                grassCounts.put(count, Arrays.asList(id));
+            }
         }
 
         return grassCounts;

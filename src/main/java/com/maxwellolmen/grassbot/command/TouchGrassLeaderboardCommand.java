@@ -21,39 +21,36 @@ public class TouchGrassLeaderboardCommand implements Command {
 
         eb.setTitle("Grass Leaderboard!!!");
         eb.setColor(Color.GREEN);
-        
+
         StringBuilder sb = new StringBuilder();
 
-        try {
-            GrassBot.sqlManager.autosave();
+        GrassBot.sqlManager.autosave();
 
-            String[] topIds = GrassBot.sqlManager.getTopGrassCounts();
+        String[] topIds = TouchGrassCommand.getTopGrassCounts();
 
-            String username;
-            int i = 1;
-            for (String id : topIds) {
-                User user = null;
-                Member member = null;
-                try {
-                    user = GrassBot.getJDA().retrieveUserById(id).complete();
-                    member = GrassBot.getJDA().getGuildById("952964020263071765").retrieveMember(user).complete();
-                } catch (NullPointerException | ErrorResponseException e) {}
-
-                if (member == null) {
-                    username = "Unknown Member";
-                } else {
-                    username = member.getEffectiveName();
-                }
-
-                if (!id.equals(topIds[0])) {
-                    sb.append('\n');
-                }
-
-                sb.append(i + " - " + username + ": " + TouchGrassCommand.touchGrassCounter.get(id));
-                i++;
+        String username;
+        int i = 1;
+        for (String id : topIds) {
+            User user = null;
+            Member member = null;
+            try {
+                user = GrassBot.getJDA().retrieveUserById(id).complete();
+                member = GrassBot.getJDA().getGuildById("952964020263071765").retrieveMember(user).complete();
+            } catch (NullPointerException | ErrorResponseException e) {
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+            if (member == null) {
+                username = "Unknown Member";
+            } else {
+                username = member.getEffectiveName();
+            }
+
+            if (!id.equals(topIds[0])) {
+                sb.append('\n');
+            }
+
+            sb.append(i + " - " + username + ": " + TouchGrassCommand.touchGrassCounter.get(id));
+            i++;
         }
 
         eb.setDescription(sb.toString());

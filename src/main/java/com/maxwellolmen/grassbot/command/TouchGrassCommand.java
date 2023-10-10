@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class TouchGrassCommand implements Command, SQLSaver {
-    public static Map<String, Integer> touchGrassCounter;
+    public static Map<Integer, List<String>> touchGrassCounter;
     private Map<String, Long> cooldownMap;
     private List<String> touchGrassMsgs;
     Clock baseClock = Clock.systemDefaultZone();
@@ -44,8 +44,9 @@ public class TouchGrassCommand implements Command, SQLSaver {
         list.add("Nerd alert! This person needs to touch some grass: ");
         list.add("It seems like you're lacking a bit of grass touching, ");
         list.add("No shower AND haven't touched grass yet? Geez, ");
-        
-        // 10% chance of adding nice message :) (AND EVEN SMALLER CHANCE OF BEING PICKED!)
+
+        // 10% chance of adding nice message :) (AND EVEN SMALLER CHANCE OF BEING
+        // PICKED!)
         if ((int) (Math.random() * 10) == 1) {
             list.add("Hmm... you look like you're doing well, no need to touch grass ;) Have a great day! ");
         }
@@ -67,31 +68,40 @@ public class TouchGrassCommand implements Command, SQLSaver {
             event.getChannel().sendMessage("You must mention a user!").queue();
 
             return;
-        }else if (event.getMessage().getMentions().getUsers().contains(event.getAuthor())) {
+        } else if (event.getMessage().getMentions().getUsers().contains(event.getAuthor())) {
             event.getChannel()
-                .sendMessage("You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.")
-                .queue();
+                    .sendMessage(
+                            "You cannot just tell yourself to touch some grass. Have some respect for yourself, it'll help out your confidence in the long run.")
+                    .queue();
 
             return;
-        } else if (cooldownMap.containsKey(event.getAuthor().getId()) && System.currentTimeMillis() - cooldownMap.get(event.getAuthor().getId()) < 86400000){
+        } else if (cooldownMap.containsKey(event.getAuthor().getId())
+                && System.currentTimeMillis() - cooldownMap.get(event.getAuthor().getId()) < 86400000) {
             event.getChannel()
-                .sendMessage(event.getAuthor().getName() + " already told someone to touch grass today. Try again in " + ( TimeUnit.MILLISECONDS.toHours((86400000 + cooldownMap.get(event.getAuthor().getId())) - System.currentTimeMillis())) + " hours.")
-                .queue();
+                    .sendMessage(event.getAuthor().getName()
+                            + " already told someone to touch grass today. Try again in "
+                            + (TimeUnit.MILLISECONDS.toHours((86400000 + cooldownMap.get(event.getAuthor().getId()))
+                                    - System.currentTimeMillis()))
+                            + " hours.")
+                    .queue();
 
             int index = (int) (Math.random() * 10);
 
-            if (index == 1){
+            if (index == 1) {
                 event.getChannel()
-                    .sendMessage("Perhaps a good alternative would be to follow your own advice.\nHowever, it seems that people are good at giving advice but not following it, so it's all up to you.")
-                    .queue(); 
+                        .sendMessage(
+                                "Perhaps a good alternative would be to follow your own advice.\nHowever, it seems that people are good at giving advice but not following it, so it's all up to you.")
+                        .queue();
             }
 
             return;
         }
-        
+
         User target = event.getMessage().getMentions().getUsers().get(0);
-        
-        touchGrassCounter.put(target.getId(), touchGrassCounter.getOrDefault(target.getId(), 0) + 1);
+
+        int count = getCount(target.getId());
+        touchGrassCounter.get(count).remove(target.getId());
+        touchGrassCounter.get(count + 1).add(target.getId());
 
         String grassMsg;
         if (target.getId() == "1078162609641107486") { // GrassBot's ID
@@ -101,14 +111,14 @@ public class TouchGrassCommand implements Command, SQLSaver {
         }
 
         event.getChannel()
-            .sendMessage(grassMsg + "\n"
-                            + "Grass Counter Increased by one. " + target.getName() + "'s count is now "
-                            + touchGrassCounter.get(target.getId()) + ".")
-            .queue();
+                .sendMessage(grassMsg + "\n"
+                        + "Grass Counter Increased by one. " + target.getName() + "'s count is now "
+                        + (count + 1) + ".")
+                .queue();
         cooldownMap.put(event.getAuthor().getId(), System.currentTimeMillis());
     }
 
-    public Map<String, Integer> getGrassCounts() {
+    public Map<Integer, List<String>> getGrassCounts() {
         return touchGrassCounter;
     }
 
@@ -126,5 +136,33 @@ public class TouchGrassCommand implements Command, SQLSaver {
     @Override
     public String getDescription() {
         return "Remind someone that they really need some grass-touching.";
+    }
+
+    public int getCount(String id) {
+        for (Map.Entry<Integer, List<String>> entry : touchGrassCounter.entrySet()) {
+            if (entry.getValue().contains(id)) {
+                return entry.getKey();
+            }
+        }
+
+        return 0;
+    }
+
+    public static String[] getTopGrassCounts() {
+        String[] ids = new String[] { null, null, null, null, null, null, null, null, null, null };
+        int i = 0;
+
+        for (Map.Entry<Integer, List<String>> entry : touchGrassCounter.entrySet()) {
+            for (String id : entry.getValue()) {
+                ids[i] = id;
+                i++;
+
+                if (i == 10) {
+                    break;
+                }
+            }
+        }
+
+        return ids;
     }
 }
