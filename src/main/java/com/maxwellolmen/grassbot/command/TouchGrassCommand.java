@@ -159,8 +159,8 @@ public class TouchGrassCommand implements Command, SQLSaver {
         String[] ids = new String[] { null, null, null, null, null, null, null, null, null, null };
         int i = 0;
 
-        for (Map.Entry<Integer, List<String>> entry : touchGrassCounter.entrySet()) {
-            for (String id : entry.getValue()) {
+        for (List<String> value : touchGrassCounter.values()) {
+            for (String id : value) {
                 ids[i] = id;
                 i++;
 
