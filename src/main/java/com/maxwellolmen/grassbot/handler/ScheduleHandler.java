@@ -33,7 +33,7 @@ public class ScheduleHandler {
             }
 
             channel.sendMessage("The time is here! Congratulations <@" + randomId
-                    + ">, your grass count has been reduced from " + oldCount + " to " + newCount + "!").queue();
+                    + ">, your grass count has been reduced from " + oldCount + " to " + newCount + "! See you next Monday @ 9pm Central, where a random user will be selected for a random decrease in their grasscount :)").queue();
         }
     }
 
