@@ -18,7 +18,11 @@ public class ScheduleHandler {
         @Override
         public void run() {
             TextChannel channel = GrassBot.jda.getTextChannelById(1078169935706062928L);
-            String randomId = TouchGrassCommand.getRandomId();
+            
+            String randomId;
+            do {
+                randomId = TouchGrassCommand.getRandomId();
+            } while (TouchGrassCommand.getCount(randomId) == 0);
 
             double rand = new Random().nextDouble();
 
@@ -38,7 +42,7 @@ public class ScheduleHandler {
             channel.sendMessage("The time is here! Congratulations <@" + randomId
                     + ">, your grass count has been reduced from " + oldCount + " to " + newCount
                     + " for a decrease of "
-                    + percentage
+                    + ((int) percentage * 100)
                     + "%! See you next Monday @ 9pm Central, where a random user will be selected for a random decrease in their grasscount :)")
                     .queue();
 
