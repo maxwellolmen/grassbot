@@ -109,7 +109,9 @@ public class SQLManager {
             if (grassCounts.containsKey(count)) {
                 grassCounts.get(count).add(id);
             } else {
-                grassCounts.put(count, Arrays.asList(id));
+                ArrayList<String> ids = new ArrayList<>();
+                ids.add(id);
+                grassCounts.put(count, ids);
             }
         }
 
