@@ -28,7 +28,6 @@ public class TouchGrassLeaderboardCommand implements Command {
 
         String[] topIds = TouchGrassCommand.getTopGrassCounts();
 
-        String username;
         int i = 1;
         for (String id : topIds) {
             User user = null;
@@ -38,18 +37,12 @@ public class TouchGrassLeaderboardCommand implements Command {
                 member = GrassBot.getJDA().getGuildById("952964020263071765").retrieveMember(user).complete();
             } catch (NullPointerException | ErrorResponseException e) {
             }
-
-            if (member == null) {
-                username = "Unknown Member";
-            } else {
-                username = member.getEffectiveName();
-            }
-
+            
             if (!id.equals(topIds[0])) {
                 sb.append('\n');
             }
 
-            sb.append(i + " - " + username + ": " + TouchGrassCommand.getCount(id));
+            sb.append(i + " - <@" + id + ">: " + TouchGrassCommand.getCount(id));
             i++;
         }
 
