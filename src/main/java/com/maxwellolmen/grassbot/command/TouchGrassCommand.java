@@ -138,7 +138,7 @@ public class TouchGrassCommand implements Command, SQLSaver {
         return "Remind someone that they really need some grass-touching.";
     }
 
-    public int getCount(String id) {
+    public static int getCount(String id) {
         for (Map.Entry<Integer, List<String>> entry : touchGrassCounter.entrySet()) {
             if (entry.getValue().contains(id)) {
                 return entry.getKey();

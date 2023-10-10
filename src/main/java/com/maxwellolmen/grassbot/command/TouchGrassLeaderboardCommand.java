@@ -49,7 +49,7 @@ public class TouchGrassLeaderboardCommand implements Command {
                 sb.append('\n');
             }
 
-            sb.append(i + " - " + username + ": " + TouchGrassCommand.touchGrassCounter.get(id));
+            sb.append(i + " - " + username + ": " + TouchGrassCommand.getCount(id));
             i++;
         }
 
