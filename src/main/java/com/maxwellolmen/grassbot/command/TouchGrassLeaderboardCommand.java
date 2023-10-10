@@ -30,14 +30,6 @@ public class TouchGrassLeaderboardCommand implements Command {
 
         int i = 1;
         for (String id : topIds) {
-            User user = null;
-            Member member = null;
-            try {
-                user = GrassBot.getJDA().retrieveUserById(id).complete();
-                member = GrassBot.getJDA().getGuildById("952964020263071765").retrieveMember(user).complete();
-            } catch (NullPointerException | ErrorResponseException e) {
-            }
-            
             if (!id.equals(topIds[0])) {
                 sb.append('\n');
             }
