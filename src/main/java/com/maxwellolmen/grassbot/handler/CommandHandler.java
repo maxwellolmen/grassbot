@@ -13,10 +13,12 @@ public class CommandHandler {
 
     public CommandHandler() {
         commands = new HashMap<>();
+        commands.put("getcount", new GetCountCommand());
         commands.put("info", new InfoCommand());
         commands.put("ping", new PingCommand());
         commands.put("touchgrass", new TouchGrassCommand());
         commands.put("touchgrassleaderboard", new TouchGrassLeaderboardCommand());
+        
 
         commands.put("help", new HelpCommand(commands));
     }
