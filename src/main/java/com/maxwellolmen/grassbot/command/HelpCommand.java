@@ -1,12 +1,9 @@
 package com.maxwellolmen.grassbot.command;
 import com.maxwellolmen.grassbot.handler.Command;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.Color;

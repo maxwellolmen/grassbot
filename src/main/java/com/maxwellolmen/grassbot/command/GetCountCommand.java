@@ -21,7 +21,7 @@ public class GetCountCommand implements Command {
         if (target.getId() == "1078162609641107486") { // GrassBot's ID
             grassMsg = "I don't have a GrassCount bro ";
         } else {
-            grassMsg = target.getAsMention() + "'s GrassCount is " + count;
+            grassMsg = target.getAsMention() + "'s GrassCount is " + count + ".";
         }
 
         event.getChannel()
