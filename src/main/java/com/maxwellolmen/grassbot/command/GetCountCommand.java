@@ -1,5 +1,6 @@
 package com.maxwellolmen.grassbot.command;
 
+import com.maxwellolmen.grassbot.GrassBot;
 import com.maxwellolmen.grassbot.handler.Command;
 
 import net.dv8tion.jda.api.entities.User;
@@ -21,7 +22,7 @@ public class GetCountCommand implements Command {
         if (target.getId() == "1078162609641107486") { // GrassBot's ID
             grassMsg = "I don't have a GrassCount bro ";
         } else {
-            grassMsg = target.getAsMention() + "'s GrassCount is " + count + ".";
+            grassMsg = GrassBot.ldg.getMember(target).getEffectiveName() + "'s GrassCount is " + count + ".";
         }
 
         event.getChannel()
