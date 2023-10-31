@@ -47,7 +47,7 @@ public class ScheduleHandler {
                 channel.sendMessage("The time is here! Congratulations <@" + randomId
                         + ">, your grass count has been reduced from " + oldCount + " to " + newCount
                         + " for a decrease of "
-                        + ((int) percentage * 100)
+                        + ((int) (percentage * 100))
                         + "%! See you next Monday @ 9pm Central, where a random user will be selected for a random decrease in their GrassCount :)")
                         .queue();
             }
