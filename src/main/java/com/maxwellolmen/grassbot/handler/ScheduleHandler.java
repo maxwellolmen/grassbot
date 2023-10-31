@@ -42,7 +42,7 @@ public class ScheduleHandler {
                     percentage = 0.1;
                 }
 
-                newCount = TouchGrassCommand.scaleCount(randomId, 1 - percentage);
+                newCount = TouchGrassCommand.scaleCount(randomId, 1.0 - percentage);
 
                 channel.sendMessage("The time is here! Congratulations <@" + randomId
                         + ">, your grass count has been reduced from " + oldCount + " to " + newCount

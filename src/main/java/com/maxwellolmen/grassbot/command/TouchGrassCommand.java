@@ -195,9 +195,8 @@ public class TouchGrassCommand implements Command, SQLSaver {
 
     public static int scaleCount(String id, double percentage) {
         int count = getCount(id);
-        count *= percentage;
 
-        updateCount(id, ((int) percentage * count));
+        updateCount(id, ((int) (percentage * count)));
 
         return count;
     }
