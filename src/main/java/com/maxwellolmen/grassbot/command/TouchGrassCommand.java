@@ -46,12 +46,12 @@ public class TouchGrassCommand implements Command, SQLSaver {
         list.add("Nerd alert! This person needs to touch some grass: ");
         list.add("It seems like you're lacking a bit of grass touching, ");
         list.add("No shower AND haven't touched grass yet? Geez, ");
-        list.add("Not even the rizzler would want your gyatt if you stuck it out. Touch grass.");
-        list.add("If you were to touch grass, it would instantly die; still do it tho, you really need it");
-        list.add("PLEASE. I BEG. TOUCH SOME FUCKING GRASS DUDE.");
-        list.add("i don't even need to say it, u know what u gotta do...");
-        list.add("Damn, you got told to touch grass. At least that's not as bad as being a frequent Hyde Park visitor, unless...");
-        list.add("GRASS GRASS GRASS GRASS GRASS");
+        list.add("Not even the rizzler would want your gyatt if you stuck it out. Touch grass. ");
+        list.add("If you were to touch grass, it would instantly die; still do it tho, you really need it ");
+        list.add("PLEASE. I BEG. TOUCH SOME FUCKING GRASS DUDE. ");
+        list.add("i don't even need to say it, u know what u gotta do... ");
+        list.add("Damn, you got told to touch grass. At least that's not as bad as being a frequent Hyde Park visitor, unless... ");
+        list.add("GRASS GRASS GRASS GRASS GRASS ");
 
         // 10% chance of adding nice message :) (AND EVEN SMALLER CHANCE OF BEING
         // PICKED!)
